@@ -2,12 +2,12 @@
 # 🤿  LitAutoDive (LITerature AUTOmation DIVEr) 🤿
 This repository attempts to automate the process of literature retrieval and converting the results to CSV format. This setup is particularly useful for literature reviews, systematic reviews, and other academic research requiring access to a large volume of articles.
 
-💻  Here, I started with Pubmed utilizing commandline tool for large-scale literature curation. Later-on I will add more databases 
+💻  Here, I started with Pubmed. utilizing its Edirect commandline tool for large-scale literature curation. Later-on I will add more databases 
 
-The search strategy here is more inclusive, as it dose not specify time frame for the results (If you need one let me know 😬 ). So, it retrieves all available metadata. 
+The search strategy here is more inclusive, as it dose not specify time frame for the results (If you need one let me know 😬 ). Hence, it retrieves all available metadata. 
 
 
-🌟 This script was tested with the manula method and both retrived the same papers  .. you can find the example input and output in the directory "Example" 
+🌟 This script was tested with the manual method and both retrived the same papers .. you can find the example input and output in the directory "Example" 
 
 All what you need to do is follow the steps: 
 

@@ -30,7 +30,7 @@ while IFS= read -r keyword || [ -n "$keyword" ]; do
   clean_keyword=$(echo "$keyword" | sed 's/["()]/\\&/g')
 
   # Generate the PubMed search command and append it to the command file
-  echo "esearch -db pubmed -query \"$clean_keyword\" | efetch -format medline > \"results_${clean_keyword}.txt\"" >> "$command_file"
+  echo "esearch -db pubmed -query \"$clean_keyword\" | efetch -format medline > \"results_Pubmed_${clean_keyword}.txt\"" >> "$command_file"
 done < "$input_file"
 
 echo "Generated all commands. Now executing them..."

@@ -39,7 +39,7 @@ Run the fetching script using the following command
     * replace mesh_keywords.txt with your keywords file name 
 
 ```bash
-time bash fetch_pubmed_lit.Edirect.v1.4.sh mesh_keywords.txt
+time bash fetch_pubmed_lit.prod.v1.0.sh mesh_keywords.txt
 ```
    *Note:* The `time` command is optional; it simply shows how long the script takes to complete.
 

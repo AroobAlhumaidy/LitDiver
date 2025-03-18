@@ -1,0 +1,5 @@
+email: email@email.com
+max_results: 10000
+date_range: "2020:2024"
+download_pdfs: true
+output_dir: output_litdiver

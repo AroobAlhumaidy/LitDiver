@@ -1,0 +1,2 @@
+"Endometriosis" AND "target" AND "treatment"
+"endometriosis" AND "molecular" AND "target"

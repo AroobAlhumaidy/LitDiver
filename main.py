@@ -1,7 +1,7 @@
 import os
 import argparse
 from utils.fetch import fetch_pubmed, save_as_xml
-from utils.export import save_as_csv, generate_summary_report
+from utils.export import save_as_csv, generate_summary_report, save_combined_xml
 from utils.pdf_downloader import download_pdfs
 from utils.log import log_failures
 from utils.config_loader import load_config
@@ -63,9 +63,9 @@ def main():
             all_records.extend(records)
         except Exception as e:
             print(f"Error processing keyword '{keyword}': {e}")
-
+    if all_records:
+        save_combined_xml(all_records, output_dir)
     generate_summary_report(all_records, output_dir)
     log_failures(output_dir)
-
 if __name__ == "__main__":
     main()

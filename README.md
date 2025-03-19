@@ -26,10 +26,10 @@ LitDiver automates the process of retrieving literature from PubMed based on cus
 
 4. **🔍 Flexible Search Scope Control**  
    - Customize **where PubMed searches**: Title, Abstract, MeSH terms, etc.
-   - Use command-line option `--field` to set (`ti`, `ab`, `tiab`, `mh`, `tw`).  
+   - Check out options with `--help`
      Example:
      ```bash
-     python3 main.py --field tiab
+     python3 main.py --help
      ```
    - Default: Broad search across all fields.
 

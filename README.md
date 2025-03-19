@@ -1,4 +1,4 @@
-# 🤿  LitDiver (LITerature DIVER) 🤿  "beta version"
+# 🤿  LitDiver (LITerature DIVER) 🤿  "beta version 2.0"
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---

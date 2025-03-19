@@ -3,11 +3,13 @@ import pandas as pd
 from collections import Counter
 from datetime import datetime
 from Bio import Entrez
+from tqdm import tqdm
+import time
 
 # Save fetched articles as CSV
 def save_as_csv(keyword, records, output_dir):
     data = []
-    for record in records:
+    for record in tqdm(records, desc=f"Processing records for: {keyword}"):
         row = [
             keyword,
             record.get('PMID', ''),
@@ -15,10 +17,33 @@ def save_as_csv(keyword, records, output_dir):
             record.get('JT', ''),
             record.get('DP', ''),
             record.get('AB', ''),
+            "; ".join(record.get('AU', [])),
+            record.get('AD', ''),
+            "; ".join(record.get('PT', [])),
+            "; ".join(record.get('MH', [])),
+            record.get('PL', ''),
+            record.get('VI', ''),
+            record.get('IP', ''),
+            record.get('PG', ''),
+            record.get('LA', ''),
+            record.get('PMC', ''),
+            "; ".join(record.get('GR', [])),
+            "; ".join(record.get('RN', [])),
+            "; ".join(record.get('CI', [])),
+            record.get('LID', ''),
+            record.get('SO', ''),
+            record.get('EDAT', ''),
+            record.get('LR', '')
         ]
         data.append(row)
 
-    columns = ['Keyword', 'PMID', 'Title', 'Journal Title', 'Publication Date', 'Abstract']
+    columns = [
+        'Keyword', 'PMID', 'Title', 'Journal Title', 'Publication Date', 'Abstract',
+        'Authors', 'Author Address', 'Publication Types', 'MeSH Terms',
+        'Country of Publication', 'Volume', 'Issue', 'Page Numbers', 'Language',
+        'PubMed Central ID', 'Grant Info', 'CAS Registry Numbers',
+        'Comments/Corrections', 'DOI', 'Source', 'Entry Date', 'Last Revision Date'
+    ]
 
     df = pd.DataFrame(data, columns=columns)
 

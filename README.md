@@ -1,5 +1,5 @@
 
-# 🤿  LitAutoDive (LITerature AUTOmation DIVEr) 🤿 #Beta 
+# 🤿  LitDiver (LITerature DIVER) 🤿 #Beta 
 This repository attempts to automate the process of literature retrieval and converting the results to CSV format. This setup is particularly useful for literature reviews, systematic reviews, and other academic research requiring access to a large volume of articles.
 
 💻  Here, I started with Pubmed. utilizing its Edirect commandline tool for large-scale literature curation. Later-on I will add more databases 

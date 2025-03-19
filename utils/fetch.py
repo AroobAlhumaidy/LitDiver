@@ -49,3 +49,4 @@ def save_as_xml(keyword, id_list, output_dir):
         file.write(all_xml_data)
 
     print(f"XML results saved to {filename}")
+    

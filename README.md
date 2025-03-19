@@ -11,21 +11,21 @@ LitDiver automates the process of retrieving literature from PubMed based on cus
 ---
 ## 🚀 Features:
 1. **📥 Download PDFs Automatically**  
-   - Retrieves available PDFs via **PubMed Central (PMC)** or **Open Access (Unpaywall)**.
+   - Retrieves available PDFs via PubMed Central (PMC) or Open Access (Unpaywall).
    - PDFs saved in an organized folder per run.
 
 2. **📑 Reference File Export (RIS Format)**  
-   - Automatically creates **.RIS files** for each keyword and a **combined deduplicated RIS**, compatible with **EndNote**, **Mendeley**, and other referencing tools.
+   - Automatically creates .RIS files** for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
 
 3. **⚙️ Customizable Config File (YAML)**  
    - Set:
-     - **Max results** per keyword (up to 10,000)
-     - **Date range filter** (e.g., `2018:2024`)
-     - **Output directory**
-     - Enable/disable **PDF download**
+     - Max results: per keyword (up to 10,000)
+     - Date range filter: (e.g., `2018:2024`)
+     - Output directoryy
+     - Enable/disable PDF download
 
 4. **🔍 Flexible Search Scope Control**  
-   - Customize **where PubMed searches**: Title, Abstract, MeSH terms, etc.
+   - Customize where PubMed searches: Title, Abstract, MeSH terms, etc.
    - Check out options with `--help`
      Example:
      ```bash

@@ -8,7 +8,7 @@ from utils.config_loader import load_config
 
 from Bio import Entrez
 
-# Placeholder main script to orchestrate LitDiver modular functions
+# Main script for LitDiver modular functions
 def main():
     parser = argparse.ArgumentParser(description="LitDiver: Automated Literature Retrieval and PDF Download Tool")
     parser.add_argument("--field", type=str, default=None,

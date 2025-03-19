@@ -53,6 +53,56 @@ def save_as_csv(keyword, records, output_dir):
     print(f"Saved CSV to {csv_filename}")
     return df
 
+# Save combined deduplicated CSV
+def save_combined_csv(all_records, output_dir):
+    unique_map = {}
+    for r in all_records:
+        pmid = r.get('PMID', '')
+        if pmid and pmid not in unique_map:
+            unique_map[pmid] = r
+
+    combined_data = []
+    for r in unique_map.values():
+        row = [
+            "Multiple Keywords",
+            r.get('PMID', ''),
+            r.get('TI', ''),
+            r.get('JT', ''),
+            r.get('DP', ''),
+            r.get('AB', ''),
+            "; ".join(r.get('AU', [])),
+            r.get('AD', ''),
+            "; ".join(r.get('PT', [])),
+            "; ".join(r.get('MH', [])),
+            r.get('PL', ''),
+            r.get('VI', ''),
+            r.get('IP', ''),
+            r.get('PG', ''),
+            r.get('LA', ''),
+            r.get('PMC', ''),
+            "; ".join(r.get('GR', [])),
+            "; ".join(r.get('RN', [])),
+            "; ".join(r.get('CI', [])),
+            r.get('LID', ''),
+            r.get('SO', ''),
+            r.get('EDAT', ''),
+            r.get('LR', '')
+        ]
+        combined_data.append(row)
+
+    columns = [
+        'Keyword', 'PMID', 'Title', 'Journal Title', 'Publication Date', 'Abstract',
+        'Authors', 'Author Address', 'Publication Types', 'MeSH Terms',
+        'Country of Publication', 'Volume', 'Issue', 'Page Numbers', 'Language',
+        'PubMed Central ID', 'Grant Info', 'CAS Registry Numbers',
+        'Comments/Corrections', 'DOI', 'Source', 'Entry Date', 'Last Revision Date'
+    ]
+
+    df_combined = pd.DataFrame(combined_data, columns=columns)
+    combined_csv_path = os.path.join(output_dir, "results_combined_deduplicated.csv")
+    df_combined.to_csv(combined_csv_path, index=False)
+    print(f"Combined deduplicated CSV saved to {combined_csv_path}")
+
 # Generate Markdown dashboard summary report
 def generate_summary_report(records, output_dir):
     total_records = len(records)

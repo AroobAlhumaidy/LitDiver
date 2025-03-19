@@ -1,2 +1,4 @@
-"Endometriosis" AND "target" AND "treatment"
-"endometriosis" AND "molecular" AND "target"
+Salmonella AND human AND ("multidrug-resistance" OR "multidrug-resistant"  OR "extensively drug-resistant" OR  "extensively drug-resistance"  OR "Antimicrobial resistance" OR "Antimicrobial resistant")
+Salmonella AND human AND co-infection AND (Bacteria OR Viruses)
+Salmonella AND ("Antimicrobial Resistance" OR "AMR") AND ("Bioinformatics" OR "Bioinformatical" OR "computational" OR "tools" OR "software")
+Salmonella AND Genome AND "Annotation" 

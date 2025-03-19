@@ -65,7 +65,11 @@ pip install -r requirements.txt
 ```
 
 ---
-
+### 💻 Installation 
+```
+git clone https://github.com/AroobAlhumaidy/LitDiver
+```
+---
 ### 📑 Usage:
 1. Edit `config.yml` with your preferences.
 2. Add your keywords to `keywords.txt`.

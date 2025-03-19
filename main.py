@@ -60,6 +60,8 @@ def main():
             save_as_csv(keyword, records, output_dir)
             if config['download_pdfs']:
                 download_pdfs(records, output_dir)
+            for r in records:
+                r['__keyword'] = keyword            
             all_records.extend(records)
         except Exception as e:
             print(f"Error processing keyword '{keyword}': {e}")

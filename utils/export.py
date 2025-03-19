@@ -58,13 +58,18 @@ def save_combined_csv(all_records, output_dir):
     unique_map = {}
     for r in all_records:
         pmid = r.get('PMID', '')
-        if pmid and pmid not in unique_map:
-            unique_map[pmid] = r
+        if pmid:
+            if pmid in unique_map:
+                unique_map[pmid]['__keywords'].add(r.get('__keyword', ''))
+            else:
+                r['__keywords'] = set([r.get('__keyword', '')])
+                unique_map[pmid] = r
 
     combined_data = []
     for r in unique_map.values():
+        keyword_str = "; ".join(sorted(r['__keywords']))
         row = [
-            "Multiple Keywords",
+            keyword_str,
             r.get('PMID', ''),
             r.get('TI', ''),
             r.get('JT', ''),

@@ -1,6 +1,7 @@
 import time
-from Bio import Entrez, Medline
 import os
+from tqdm import tqdm
+from Bio import Entrez, Medline
 
 # Fetch articles from PubMed
 def fetch_pubmed(keyword, max_results=10000):
@@ -9,13 +10,18 @@ def fetch_pubmed(keyword, max_results=10000):
     handle.close()
 
     total_hits = int(record["Count"])
-    print(f"Total hits found: {total_hits} for keyword: {keyword}")
+    print(f"\n🔍 Total hits found: {total_hits} for keyword: {keyword}\n")
 
     id_list = record['IdList']
-    print(f"Fetching {len(id_list)} records for keyword: {keyword}")
+    print(f"📥 Fetching {len(id_list)} records in MEDLINE format...\n")
 
     all_records = []
-    for start in range(0, len(id_list), 1000):
+    for start in tqdm(range(0, len(id_list), 1000),
+                      desc="📖 Fetching MEDLINE",
+                      unit="batch",
+                      colour="green",
+                      ncols=80,
+                      bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'):
         end = start + 1000
         batch_ids = id_list[start:end]
         handle = Entrez.efetch(db="pubmed", id=batch_ids, rettype="medline", retmode="text")

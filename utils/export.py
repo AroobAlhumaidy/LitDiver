@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from collections import Counter
 from datetime import datetime
+from Bio import Entrez
 
 # Save fetched articles as CSV
 def save_as_csv(keyword, records, output_dir):
@@ -50,3 +51,25 @@ def generate_summary_report(records, output_dir):
         report_file.write("\n".join(report_lines))
 
     print(f"Summary report saved to {report_path}")
+
+# Save combined deduplicated XML from all records
+def save_combined_xml(all_records, output_dir):
+    unique_pmids = list(set(record.get('PMID', '') for record in all_records if record.get('PMID', '')))
+
+    print(f"\n📦 Fetching combined deduplicated XML for {len(unique_pmids)} unique PMIDs...")
+
+    combined_xml = ""
+    for start in tqdm(range(0, len(unique_pmids), 1000), desc="📄 Fetching Combined XML", unit="batch"):
+        end = start + 1000
+        batch_ids = unique_pmids[start:end]
+        handle = Entrez.efetch(db="pubmed", id=batch_ids, rettype="abstract", retmode="xml")
+        xml_data = handle.read()
+        handle.close()
+        combined_xml += xml_data
+        time.sleep(0.5)
+
+    xml_path = os.path.join(output_dir, "results_combined_deduplicated.xml")
+    with open(xml_path, "w", encoding="utf-8") as xml_file:
+        xml_file.write(combined_xml)
+
+    print(f"Combined deduplicated XML saved to {xml_path}")

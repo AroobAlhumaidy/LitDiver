@@ -7,76 +7,35 @@ import re
 from PySide6.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
     QPushButton, QCheckBox, QFileDialog, QMessageBox, QHBoxLayout,
-    QPlainTextEdit, QComboBox, QProgressBar
+    QPlainTextEdit, QComboBox, QProgressBar, QGroupBox
 )
 from PySide6.QtCore import Qt, QProcess
+from PySide6.QtGui import QIcon
 
 class LitDiverGUI(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("LitDiver - GUI Configuration")
-        self.setFixedWidth(500)
+        self.setWindowTitle("LitDiver - Smart Literature Fetcher")
+        self.setFixedWidth(550)
+        self.setWindowIcon(QIcon("icons/litdiver.png"))
+        self.setStyleSheet("font-family: 'Segoe UI'; font-size: 11pt;")
+
         self.process = QProcess(self)
         self.process.readyReadStandardOutput.connect(self.read_stdout)
         self.process.readyReadStandardError.connect(self.read_stderr)
         self.process.finished.connect(self.process_finished)
-        self.init_ui()
+
         self.total_keywords = 0
         self.keywords_done = 0
-        from PySide6.QtGui import QIcon
-        self.setWindowIcon(QIcon("icons/litdiver.png"))
-
+        self.init_ui()
+        
+        self.setWindowIcon(QIcon("icons/8005738.png"))
 
     def init_ui(self):
         layout = QVBoxLayout()
 
-        ## Email input
-        #self.email_label = QLabel("Email Address:")
-        #self.email_input = QLineEdit("")
-        #layout.addWidget(self.email_label)
-        #layout.addWidget(self.email_input)
-
-        # Max Results
-        self.max_results_label = QLabel("Max Results (up to 10000):")
-        self.max_results_input = QLineEdit("100")
-        layout.addWidget(self.max_results_label)
-        layout.addWidget(self.max_results_input)
-
-        # Date Range
-        self.date_range_label = QLabel("Date Range (e.g., 2020:2024):")
-        self.date_range_input = QLineEdit("")
-        layout.addWidget(self.date_range_label)
-        layout.addWidget(self.date_range_input)
-
-        # Search Field Selector
-        self.field_label = QLabel("Search Field (optional):")
-        self.field_dropdown = QComboBox()
-        self.field_dropdown.addItems(["All Fields", "ti", "ab", "tiab", "mh", "tw"])
-        layout.addWidget(self.field_label)
-        layout.addWidget(self.field_dropdown)
-
-        # Keywords File
-        self.keyword_file_label = QLabel("Select Keywords File:")
-        self.keyword_file_input = QLineEdit()
-        self.keyword_file_button = QPushButton("Browse...")
-        self.keyword_file_button.clicked.connect(self.select_keyword_file)
-        layout.addWidget(self.keyword_file_label)
-        layout.addWidget(self.keyword_file_input)
-        layout.addWidget(self.keyword_file_button)
-
-        # Output Directory
-        self.output_dir_label = QLabel("Select Output Directory:")
-        self.output_dir_input = QLineEdit("output_litdiver")
-        self.output_dir_button = QPushButton("Browse...")
-        self.output_dir_button.clicked.connect(self.select_output_dir)
-        layout.addWidget(self.output_dir_label)
-        layout.addWidget(self.output_dir_input)
-        layout.addWidget(self.output_dir_button)
-
-        # PDF Checkbox
-        self.pdf_checkbox = QCheckBox("Download PDFs")
-        self.pdf_checkbox.setChecked(True)
-        layout.addWidget(self.pdf_checkbox)
+        layout.addWidget(self.group_inputs())
+        layout.addWidget(self.group_outputs())
 
         # Run and Stop Buttons
         button_layout = QHBoxLayout()
@@ -103,6 +62,64 @@ class LitDiverGUI(QWidget):
 
         self.setLayout(layout)
 
+    def group_inputs(self):
+        group = QGroupBox("Search Settings")
+        layout = QVBoxLayout()
+
+        self.email_input = QLineEdit("")
+        self.email_input.setToolTip("Required for NCBI Entrez access.")
+        layout.addWidget(QLabel("Email Address:"))
+        layout.addWidget(self.email_input)
+
+        self.max_results_input = QLineEdit("100")
+        self.max_results_input.setToolTip("Maximum results to fetch per query (up to 10000).")
+        layout.addWidget(QLabel("Max Results:"))
+        layout.addWidget(self.max_results_input)
+
+        self.date_range_input = QLineEdit("")
+        self.date_range_input.setToolTip("Date range for the search. Example: 2020:2024")
+        layout.addWidget(QLabel("Date Range (e.g., 2020:2024):"))
+        layout.addWidget(self.date_range_input)
+
+        self.field_dropdown = QComboBox()
+        self.field_dropdown.addItems(["All Fields", "ti", "ab", "tiab", "mh", "tw"])
+        self.field_dropdown.setToolTip("Choose where to search the keyword (e.g., title, abstract, MeSH terms).")
+        layout.addWidget(QLabel("Search Field (optional):"))
+        layout.addWidget(self.field_dropdown)
+
+        group.setLayout(layout)
+        return group
+
+    def group_outputs(self):
+        group = QGroupBox("Files and Output")
+        layout = QVBoxLayout()
+
+        self.keyword_file_input = QLineEdit()
+        self.keyword_file_input.setToolTip("The .txt file containing one keyword/search line per row.")
+        self.keyword_file_button = QPushButton("Browse...")
+        self.keyword_file_button.clicked.connect(self.select_keyword_file)
+
+        layout.addWidget(QLabel("Keywords File:"))
+        layout.addWidget(self.keyword_file_input)
+        layout.addWidget(self.keyword_file_button)
+
+        self.output_dir_input = QLineEdit("output_litdiver")
+        self.output_dir_input.setToolTip("Folder where LitDiver will save results.")
+        self.output_dir_button = QPushButton("Browse...")
+        self.output_dir_button.clicked.connect(self.select_output_dir)
+
+        layout.addWidget(QLabel("Output Directory:"))
+        layout.addWidget(self.output_dir_input)
+        layout.addWidget(self.output_dir_button)
+
+        self.pdf_checkbox = QCheckBox("Download PDFs")
+        self.pdf_checkbox.setChecked(True)
+        self.pdf_checkbox.setToolTip("Enable to download open-access PDFs for each result.")
+        layout.addWidget(self.pdf_checkbox)
+
+        group.setLayout(layout)
+        return group
+
     def select_keyword_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select Keywords File", "", "Text Files (*.txt)")
         if file_path:
@@ -127,10 +144,10 @@ class LitDiverGUI(QWidget):
             QMessageBox.warning(self, "Missing Input", "Please select a valid keyword file.")
             return
 
-        #email = self.email_input.text().strip()
-        #if not email:
-        #    QMessageBox.warning(self, "Missing Input", "Please enter a valid email address.")
-        #    return
+        email = self.email_input.text().strip()
+        if not email:
+            QMessageBox.warning(self, "Missing Input", "Please enter a valid email address.")
+            return
 
         field_selection = self.field_dropdown.currentText()
         field = None if field_selection == "All Fields" else field_selection
@@ -141,7 +158,7 @@ class LitDiverGUI(QWidget):
             self.keywords_done = 0
 
         config = {
-            "email": "email@email.com",
+            "email": email,
             "max_results": max_results,
             "date_range": self.date_range_input.text(),
             "output_dir": self.output_dir_input.text(),

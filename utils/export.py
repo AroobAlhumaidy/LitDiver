@@ -5,6 +5,9 @@ from datetime import datetime
 from Bio import Entrez
 from tqdm import tqdm
 import time
+import shutil
+
+shutil.copy("pubmed_style.xsl", output_dir)
 
 # Save fetched articles as CSV
 def save_as_csv(keyword, records, output_dir):
@@ -138,7 +141,8 @@ def save_combined_xml(all_records, output_dir):
 
     print(f"\n📦 Fetching combined deduplicated XML for {len(unique_pmids)} unique PMIDs...")
 
-    combined_xml = ""
+    combined_xml = '<?xml-stylesheet type="text/xsl" href="pubmed_style.xsl"?>\n'  # Add stylesheet at the start
+
     for start in tqdm(range(0, len(unique_pmids), 1000), desc="📄 Fetching Combined XML", unit="batch"):
         end = start + 1000
         batch_ids = unique_pmids[start:end]
@@ -151,5 +155,8 @@ def save_combined_xml(all_records, output_dir):
     xml_path = os.path.join(output_dir, "results_combined_deduplicated.xml")
     with open(xml_path, "w", encoding="utf-8") as xml_file:
         xml_file.write(combined_xml)
+
+    # Copy stylesheet to output folder
+    shutil.copy("pubmed_style.xsl", output_dir)
 
     print(f"Combined deduplicated XML saved to {xml_path}")

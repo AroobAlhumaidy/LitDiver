@@ -35,6 +35,7 @@ def fetch_pubmed(keyword, max_results=10000):
 def save_as_xml(keyword, id_list, output_dir):
     filename = os.path.join(output_dir, f"results_{keyword.replace(' ', '_')}.xml")
     all_xml_data = ""
+
     for start in range(0, len(id_list), 1000):
         end = start + 1000
         batch_ids = id_list[start:end]
@@ -44,8 +45,13 @@ def save_as_xml(keyword, id_list, output_dir):
         all_xml_data += xml_data
         time.sleep(0.5)
 
+    # Insert XSL stylesheet reference
+    xml_with_style = '<?xml-stylesheet type="text/xsl" href="pubmed_style.xsl"?>\n' + all_xml_data
+
     with open(filename, "w", encoding="utf-8") as file:
-        file.write(all_xml_data)
+        file.write(xml_with_style)
+
+    # Copy the stylesheet into output dir
+    shutil.copy("pubmed_style.xsl", output_dir)
 
     print(f"XML results saved to {filename}")
-    

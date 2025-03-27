@@ -1,106 +1,96 @@
 import sys
-import os
-import yaml
 from PySide6.QtWidgets import (
-    QApplication, QWidget, QLabel, QLineEdit, QPushButton,
-    QCheckBox, QFileDialog, QVBoxLayout, QHBoxLayout, QMessageBox
+    QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
+    QPushButton, QCheckBox, QFileDialog, QMessageBox
 )
 from PySide6.QtCore import Qt
-
-CONFIG_PATH = "config.yaml"
-
-def load_config():
-    if os.path.exists(CONFIG_PATH):
-        with open(CONFIG_PATH, 'r') as f:
-            return yaml.safe_load(f)
-    return {
-        'email': '',
-        'max_results': 100,
-        'date_range': '',
-        'output_dir': 'output_litdiver',
-        'download_pdfs': True
-    }
-
-def save_config(config):
-    with open(CONFIG_PATH, 'w') as f:
-        yaml.dump(config, f)
+import yaml
+import subprocess
 
 class LitDiverGUI(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("LitDiver Configuration")
-        self.config = load_config()
-        self.setup_ui()
+        self.setWindowTitle("LitDiver - GUI Configuration")
+        self.setFixedWidth(400)
+        self.init_ui()
 
-    def setup_ui(self):
+    def init_ui(self):
         layout = QVBoxLayout()
 
-        # Email
-        self.email_input = QLineEdit(self.config.get('email', ''))
-        layout.addLayout(self._form_row("Email:", self.email_input))
-
         # Max Results
-        self.max_results_input = QLineEdit(str(self.config.get('max_results', 100)))
-        layout.addLayout(self._form_row("Max Results (up to 10000):", self.max_results_input))
+        self.max_results_label = QLabel("Max Results (up to 10000):")
+        self.max_results_input = QLineEdit("100")
+        layout.addWidget(self.max_results_label)
+        layout.addWidget(self.max_results_input)
 
         # Date Range
-        self.date_input = QLineEdit(self.config.get('date_range', ''))
-        layout.addLayout(self._form_row("Date Range (e.g., 2020:2024):", self.date_input))
+        self.date_range_label = QLabel("Date Range (e.g., 2020:2024):")
+        self.date_range_input = QLineEdit("")
+        layout.addWidget(self.date_range_label)
+        layout.addWidget(self.date_range_input)
 
-        # Output Directory with file picker
-        self.output_input = QLineEdit(self.config.get('output_dir', 'output_litdiver'))
-        output_browse = QPushButton("Browse")
-        output_browse.clicked.connect(self.pick_output_dir)
-        output_layout = QHBoxLayout()
-        output_layout.addWidget(QLabel("Output Directory:"))
-        output_layout.addWidget(self.output_input)
-        output_layout.addWidget(output_browse)
-        layout.addLayout(output_layout)
+        # Keywords File
+        self.keyword_file_label = QLabel("Select Keywords File:")
+        self.keyword_file_input = QLineEdit()
+        self.keyword_file_button = QPushButton("Browse...")
+        self.keyword_file_button.clicked.connect(self.select_keyword_file)
+        layout.addWidget(self.keyword_file_label)
+        layout.addWidget(self.keyword_file_input)
+        layout.addWidget(self.keyword_file_button)
 
-        # PDF Download checkbox
+        # Output Directory
+        self.output_dir_label = QLabel("Select Output Directory:")
+        self.output_dir_input = QLineEdit("output_litdiver")
+        self.output_dir_button = QPushButton("Browse...")
+        self.output_dir_button.clicked.connect(self.select_output_dir)
+        layout.addWidget(self.output_dir_label)
+        layout.addWidget(self.output_dir_input)
+        layout.addWidget(self.output_dir_button)
+
+        # PDF Checkbox
         self.pdf_checkbox = QCheckBox("Download PDFs")
-        self.pdf_checkbox.setChecked(self.config.get('download_pdfs', True))
+        self.pdf_checkbox.setChecked(True)
         layout.addWidget(self.pdf_checkbox)
 
-        # Buttons
-        button_layout = QHBoxLayout()
-        save_btn = QPushButton("Save and Run")
-        save_btn.clicked.connect(self.save_and_run)
-        cancel_btn = QPushButton("Cancel")
-        cancel_btn.clicked.connect(self.close)
-        button_layout.addWidget(save_btn)
-        button_layout.addWidget(cancel_btn)
-        layout.addLayout(button_layout)
+        # Save and Run Button
+        self.save_button = QPushButton("Save Config and Run")
+        self.save_button.clicked.connect(self.save_and_run)
+        layout.addWidget(self.save_button)
 
         self.setLayout(layout)
 
-    def _form_row(self, label_text, widget):
-        layout = QHBoxLayout()
-        label = QLabel(label_text)
-        label.setFixedWidth(180)
-        layout.addWidget(label)
-        layout.addWidget(widget)
-        return layout
+    def select_keyword_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Keywords File", "", "Text Files (*.txt)")
+        if file_path:
+            self.keyword_file_input.setText(file_path)
 
-    def pick_output_dir(self):
+    def select_output_dir(self):
         dir_path = QFileDialog.getExistingDirectory(self, "Select Output Directory")
         if dir_path:
-            self.output_input.setText(dir_path)
+            self.output_dir_input.setText(dir_path)
 
     def save_and_run(self):
+        config = {
+            "email": "your-email@example.com",
+            "max_results": int(self.max_results_input.text()),
+            "date_range": self.date_range_input.text(),
+            "output_dir": self.output_dir_input.text(),
+            "download_pdfs": self.pdf_checkbox.isChecked(),
+        }
+        with open("config.yaml", "w") as f:
+            yaml.dump(config, f)
+
+        keyword_file = self.keyword_file_input.text().strip()
+        if not keyword_file:
+            QMessageBox.warning(self, "Missing Input", "Please select a keyword file.")
+            return
+
         try:
-            config = {
-                'email': self.email_input.text().strip(),
-                'max_results': int(self.max_results_input.text().strip()),
-                'date_range': self.date_input.text().strip(),
-                'output_dir': self.output_input.text().strip(),
-                'download_pdfs': self.pdf_checkbox.isChecked()
-            }
-            save_config(config)
-            QMessageBox.information(self, "Saved", "Configuration saved. You can now run LitDiver from the terminal.")
-            self.close()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Max results must be a number.")
+            subprocess.run(["python3", "main.py"], check=True)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to run main.py: {e}")
+        else:
+            QMessageBox.information(self, "Success", "LitDiver has finished running.")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

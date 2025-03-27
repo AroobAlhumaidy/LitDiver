@@ -13,12 +13,14 @@ def main():
     parser = argparse.ArgumentParser(description="LitDiver: Automated Literature Retrieval and PDF Download Tool")
     parser.add_argument("--field", type=str, default=None,
                         help="Optional field to search in: ti (Title), ab (Abstract), tiab (Title/Abstract), mh (MeSH), tw (Text Words). Default: all fields")
+    parser.add_argument("--keywords", type=str, default=None,
+                        help="Path to keyword file (e.g., MeSH.keywords.txt)")
     args = parser.parse_args()
 
     config = load_config()
     Entrez.email = config['email']
 
-    keyword_file = "keywords.txt"
+    keyword_file = args.keywords if args.keywords else "keywords.txt"
     if not os.path.exists(keyword_file):
         print(f"Keyword file '{keyword_file}' not found.")
         return

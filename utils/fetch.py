@@ -19,7 +19,6 @@ def fetch_pubmed(keyword, max_results=10000):
     for start in tqdm(range(0, len(id_list), 1000),
                       desc="📖 Fetching MEDLINE",
                       unit="batch",
-                      colour="green",
                       ncols=80,
                       bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'):
         end = start + 1000

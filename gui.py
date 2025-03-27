@@ -1,17 +1,20 @@
 import sys
-from PySide6.QtWidgets import (
-    QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
-    QPushButton, QCheckBox, QFileDialog, QMessageBox
-)
-from PySide6.QtCore import Qt
+import os
+import platform
 import yaml
 import subprocess
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
+    QPushButton, QCheckBox, QFileDialog, QMessageBox, QHBoxLayout
+)
+from PySide6.QtCore import Qt, QTimer
 
 class LitDiverGUI(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("LitDiver - GUI Configuration")
         self.setFixedWidth(400)
+        self.process = None
         self.init_ui()
 
     def init_ui(self):
@@ -52,10 +55,16 @@ class LitDiverGUI(QWidget):
         self.pdf_checkbox.setChecked(True)
         layout.addWidget(self.pdf_checkbox)
 
-        # Save and Run Button
+        # Run and Stop Buttons
+        button_layout = QHBoxLayout()
         self.save_button = QPushButton("Save Config and Run")
         self.save_button.clicked.connect(self.save_and_run)
-        layout.addWidget(self.save_button)
+        self.stop_button = QPushButton("Stop")
+        self.stop_button.clicked.connect(self.stop_process)
+        self.stop_button.setEnabled(False)
+        button_layout.addWidget(self.save_button)
+        button_layout.addWidget(self.stop_button)
+        layout.addLayout(button_layout)
 
         self.setLayout(layout)
 
@@ -70,9 +79,22 @@ class LitDiverGUI(QWidget):
             self.output_dir_input.setText(dir_path)
 
     def save_and_run(self):
+        try:
+            max_results = int(self.max_results_input.text())
+            if max_results <= 0 or max_results > 10000:
+                raise ValueError
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Max Results must be a number between 1 and 10000.")
+            return
+
+        keyword_file = self.keyword_file_input.text().strip()
+        if not keyword_file or not os.path.exists(keyword_file):
+            QMessageBox.warning(self, "Missing Input", "Please select a valid keyword file.")
+            return
+
         config = {
             "email": "your-email@example.com",
-            "max_results": int(self.max_results_input.text()),
+            "max_results": max_results,
             "date_range": self.date_range_input.text(),
             "output_dir": self.output_dir_input.text(),
             "download_pdfs": self.pdf_checkbox.isChecked(),
@@ -80,17 +102,34 @@ class LitDiverGUI(QWidget):
         with open("config.yaml", "w") as f:
             yaml.dump(config, f)
 
-        keyword_file = self.keyword_file_input.text().strip()
-        if not keyword_file:
-            QMessageBox.warning(self, "Missing Input", "Please select a keyword file.")
-            return
-
         try:
-            subprocess.run(["python3", "main.py"], check=True)
+            self.process = subprocess.Popen(["python3", "main.py", "--keywords", keyword_file])
+            self.stop_button.setEnabled(True)
+            QTimer.singleShot(2000, lambda: self.check_process(config["output_dir"]))
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to run main.py: {e}")
+
+    def check_process(self, output_dir):
+        if self.process and self.process.poll() is None:
+            QTimer.singleShot(1000, lambda: self.check_process(output_dir))
         else:
+            self.stop_button.setEnabled(False)
             QMessageBox.information(self, "Success", "LitDiver has finished running.")
+            self.open_output_dir(output_dir)
+
+    def stop_process(self):
+        if self.process and self.process.poll() is None:
+            self.process.terminate()
+            self.stop_button.setEnabled(False)
+            QMessageBox.information(self, "Stopped", "LitDiver was stopped by the user.")
+
+    def open_output_dir(self, path):
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.run(["open", path])
+        else:
+            subprocess.run(["xdg-open", path])
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

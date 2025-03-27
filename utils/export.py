@@ -135,11 +135,14 @@ def generate_summary_report(records, output_dir):
 
 # Save combined deduplicated XML from all records
 def save_combined_xml(all_records, output_dir):
-    unique_pmids = list(set(record.get('PMID', '') for record in all_records if record.get('PMID', '')))
+    from Bio import Entrez
+    from tqdm import tqdm
+    import time
 
+    unique_pmids = list(set(record.get('PMID', '') for record in all_records if record.get('PMID', '')))
     print(f"\n📦 Fetching combined deduplicated XML for {len(unique_pmids)} unique PMIDs...")
 
-    combined_xml = '<?xml-stylesheet type="text/xsl" href="pubmed_style.xsl"?>\n'  # Add stylesheet at the start
+    combined_xml = '<?xml-stylesheet type="text/xsl" href="pubmed_style.xsl"?>\n'
 
     for start in tqdm(range(0, len(unique_pmids), 1000), desc="📄 Fetching Combined XML", unit="batch"):
         end = start + 1000
@@ -150,13 +153,14 @@ def save_combined_xml(all_records, output_dir):
         combined_xml += xml_data
         time.sleep(0.5)
 
-    xml_path = os.path.join(output_dir, "results_combined_deduplicated.xml")
-    with open(xml_path, "w", encoding="utf-8") as xml_file:
-        xml_file.write(combined_xml)
-
-    # Copy stylesheet to output folder
-    shutil.copy("pubmed_style.xsl", output_dir)
+    # Move to xml/ subfolder
     xml_dir = os.path.join(output_dir, "xml")
     os.makedirs(xml_dir, exist_ok=True)
     xml_path = os.path.join(xml_dir, "results_combined_deduplicated.xml")
+
+    with open(xml_path, "w", encoding="utf-8") as xml_file:
+        xml_file.write(combined_xml)
+
+    # Copy XSL stylesheet to xml/ folder
+    shutil.copy("pubmed_style.xsl", xml_dir)
     print(f"Combined deduplicated XML saved to {xml_path}")

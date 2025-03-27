@@ -138,7 +138,7 @@ class LitDiverGUI(QWidget):
             self.keywords_done = 0
 
         config = {
-            "email": email@email.com,
+            "email": "email@email.com",
             "max_results": max_results,
             "date_range": self.date_range_input.text(),
             "output_dir": self.output_dir_input.text(),

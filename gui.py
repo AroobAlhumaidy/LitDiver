@@ -27,11 +27,11 @@ class LitDiverGUI(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        # Email input
-        self.email_label = QLabel("Email Address:")
-        self.email_input = QLineEdit("")
-        layout.addWidget(self.email_label)
-        layout.addWidget(self.email_input)
+        ## Email input
+        #self.email_label = QLabel("Email Address:")
+        #self.email_input = QLineEdit("")
+        #layout.addWidget(self.email_label)
+        #layout.addWidget(self.email_input)
 
         # Max Results
         self.max_results_label = QLabel("Max Results (up to 10000):")

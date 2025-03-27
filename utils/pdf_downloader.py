@@ -60,31 +60,29 @@ def download_open_pdf(url, output_dir, pmid):
     except Exception as e:
         print(f"Error downloading OA PDF for PMID {pmid}: {e}")
         failure_log.append((pmid, f"OA PDF download error: {e}"))
-        
+
 # Process all records for PDF download
 def download_pdfs(records, output_dir):
     pdf_dir = os.path.join(output_dir, "pdfs")
     os.makedirs(pdf_dir, exist_ok=True)
 
-for r in records:
-    pmid = r.get('PMID', '')
-    pmc_id = r.get('PMC', '').replace('PMC', '')
-    journal = r.get('JT', '')
+    for r in records:
+        pmid = r.get('PMID', '')
+        pmc_id = r.get('PMC', '').replace('PMC', '')
+        journal = r.get('JT', '')
 
-    if pmc_id:
-        download_pmc_pdf(pmc_id, pdf_dir, pmid, journal)
-    else:
-        lid_value = r.get('LID', '').strip()
-        if lid_value:
-            doi_raw = lid_value.split()[0]
-            doi = doi_raw.replace('[doi]', '').strip()
-            if doi and '/' in doi:
-                pdf_url = get_unpaywall_pdf(doi)
-                if pdf_url:
-                    download_open_pdf(pdf_url, pdf_dir, pmid)
-                else:
-                    failure_log.append((pmid, f"No OA PDF found via Unpaywall - Journal: {journal}"))
+        if pmc_id:
+            download_pmc_pdf(pmc_id, pdf_dir, pmid, journal)
         else:
-            failure_log.append((pmid, f"No DOI found in LID field - Journal: {journal}"))
-
-
+            lid_value = r.get('LID', '').strip()
+            if lid_value:
+                doi_raw = lid_value.split()[0]
+                doi = doi_raw.replace('[doi]', '').strip()
+                if doi and '/' in doi:
+                    pdf_url = get_unpaywall_pdf(doi)
+                    if pdf_url:
+                        download_open_pdf(pdf_url, pdf_dir, pmid)
+                    else:
+                        failure_log.append((pmid, f"No OA PDF found via Unpaywall - Journal: {journal}"))
+            else:
+                failure_log.append((pmid, f"No DOI found in LID field - Journal: {journal}"))

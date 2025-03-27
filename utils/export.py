@@ -148,7 +148,9 @@ def save_combined_xml(all_records, output_dir):
         end = start + 1000
         batch_ids = unique_pmids[start:end]
         handle = Entrez.efetch(db="pubmed", id=batch_ids, rettype="abstract", retmode="xml")
-        xml_data = handle.read().decode("utf-8")
+        xml_data = handle.read()
+        if isinstance(xml_data, bytes):
+            xml_data = xml_data.decode("utf-8")
         handle.close()
         combined_xml += xml_data
         time.sleep(0.5)

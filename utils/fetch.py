@@ -42,7 +42,9 @@ def save_as_xml(keyword, id_list, output_dir):
         end = start + 1000
         batch_ids = id_list[start:end]
         handle = Entrez.efetch(db="pubmed", id=batch_ids, rettype="abstract", retmode="xml")
-        xml_data = handle.read().decode("utf-8")
+        xml_data = handle.read()
+        if isinstance(xml_data, bytes):
+            xml_data = xml_data.decode("utf-8")
         handle.close()
         all_xml_data += xml_data
         time.sleep(0.5)

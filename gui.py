@@ -17,7 +17,7 @@ class LitDiverGUI(QWidget):
         super().__init__()
         self.setWindowTitle("LitDiver - Smart Literature Fetcher")
         self.setFixedWidth(550)
-        self.setWindowIcon(QIcon("icons/8005738.png"))
+        self.setWindowIcon(QIcon("icons/8005765.png"))
         self.setStyleSheet("font-family: 'Segoe UI'; font-size: 11pt;")
 
         self.process = QProcess(self)

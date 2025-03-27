@@ -217,7 +217,7 @@ class LitDiverGUI(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-app.setWindowIcon(QIcon("icons/8005738.png"))
+    app.setWindowIcon(QIcon("icons/8005738.png"))
     gui = LitDiverGUI()
     gui.show()
     sys.exit(app.exec())

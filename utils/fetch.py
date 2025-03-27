@@ -2,6 +2,7 @@ import time
 import os
 from tqdm import tqdm
 from Bio import Entrez, Medline
+import shutil
 
 # Fetch articles from PubMed
 def fetch_pubmed(keyword, max_results=10000):

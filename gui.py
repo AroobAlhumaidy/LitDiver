@@ -12,12 +12,19 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QProcess
 from PySide6.QtGui import QIcon
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for PyInstaller and dev. """
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+    
 class LitDiverGUI(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("LitDiver - Smart Literature Fetcher")
         self.setFixedWidth(550)
-        self.setWindowIcon(QIcon("icons/8005765.png"))
+        self.setWindowIcon(QIcon(resource_path("icons/8005738.png")))
+        #self.setWindowIcon(QIcon("icons/8005765.png"))
         self.setStyleSheet("font-family: 'Segoe UI'; font-size: 11pt;")
 
         self.process = QProcess(self)

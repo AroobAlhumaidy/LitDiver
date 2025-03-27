@@ -23,6 +23,9 @@ class LitDiverGUI(QWidget):
         self.init_ui()
         self.total_keywords = 0
         self.keywords_done = 0
+        from PySide6.QtGui import QIcon
+        self.setWindowIcon(QIcon("icons/litdiver.png"))
+
 
     def init_ui(self):
         layout = QVBoxLayout()

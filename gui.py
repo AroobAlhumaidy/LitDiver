@@ -3,10 +3,11 @@ import os
 import platform
 import yaml
 import subprocess
+import re
 from PySide6.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
     QPushButton, QCheckBox, QFileDialog, QMessageBox, QHBoxLayout,
-    QPlainTextEdit, QComboBox
+    QPlainTextEdit, QComboBox, QProgressBar
 )
 from PySide6.QtCore import Qt, QProcess
 
@@ -20,6 +21,8 @@ class LitDiverGUI(QWidget):
         self.process.readyReadStandardError.connect(self.read_stderr)
         self.process.finished.connect(self.process_finished)
         self.init_ui()
+        self.total_keywords = 0
+        self.keywords_done = 0
 
     def init_ui(self):
         layout = QVBoxLayout()
@@ -83,6 +86,12 @@ class LitDiverGUI(QWidget):
         button_layout.addWidget(self.stop_button)
         layout.addLayout(button_layout)
 
+        # Progress Bar
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setValue(0)
+        self.progress_bar.setTextVisible(True)
+        layout.addWidget(self.progress_bar)
+
         # Log output area
         self.log_output = QPlainTextEdit()
         self.log_output.setReadOnly(True)
@@ -123,6 +132,11 @@ class LitDiverGUI(QWidget):
         field_selection = self.field_dropdown.currentText()
         field = None if field_selection == "All Fields" else field_selection
 
+        with open(keyword_file, "r") as f:
+            self.total_keywords = sum(1 for line in f if line.strip())
+            self.progress_bar.setMaximum(self.total_keywords)
+            self.keywords_done = 0
+
         config = {
             "email": email,
             "max_results": max_results,
@@ -137,6 +151,7 @@ class LitDiverGUI(QWidget):
         self.log_output.clear()
         self.stop_button.setEnabled(True)
         self.run_button.setEnabled(False)
+        self.progress_bar.setValue(0)
 
         cmd = ["main.py", "--keywords", keyword_file]
         if field:
@@ -148,6 +163,11 @@ class LitDiverGUI(QWidget):
         output = self.process.readAllStandardOutput().data().decode()
         self.log_output.appendPlainText(output)
 
+        match = re.search(r"\[(\d+)/(\d+)] Processing keyword", output)
+        if match:
+            self.keywords_done = int(match.group(1))
+            self.progress_bar.setValue(self.keywords_done)
+
     def read_stderr(self):
         output = self.process.readAllStandardError().data().decode()
         self.log_output.appendPlainText(output)
@@ -157,6 +177,9 @@ class LitDiverGUI(QWidget):
         self.run_button.setEnabled(True)
         self.log_output.appendPlainText("✅ LitDiver has finished.")
         self.open_output_dir(self.output_dir_input.text())
+
+        summary = f"✅ Run Complete\nProcessed {self.keywords_done} of {self.total_keywords} keywords."
+        QMessageBox.information(self, "Summary", summary)
 
     def stop_process(self):
         if self.process and self.process.state() == QProcess.Running:

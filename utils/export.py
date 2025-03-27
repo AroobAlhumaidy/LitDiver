@@ -7,8 +7,6 @@ from tqdm import tqdm
 import time
 import shutil
 
-shutil.copy("pubmed_style.xsl", output_dir)
-
 # Save fetched articles as CSV
 def save_as_csv(keyword, records, output_dir):
     data = []

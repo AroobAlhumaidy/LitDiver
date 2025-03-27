@@ -5,18 +5,25 @@ import requests
 failure_log = []
 
 # Download PDF from PMC if available
-def download_pmc_pdf(pmc_id, output_dir, pmid):
+def download_pmc_pdf(pmc_id, output_dir, pmid, journal=''):
     pdf_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{pmc_id}/pdf/"
-    response = requests.get(pdf_url, stream=True)
-    if response.status_code == 200:
-        pdf_path = os.path.join(output_dir, f"{pmid}_PMC{pmc_id}.pdf")
-        with open(pdf_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print(f"Downloaded PMC PDF for PMID {pmid} to {pdf_path}")
-    else:
-        print(f"Failed to download PMC PDF for PMID {pmid}, status code {response.status_code}")
-        failure_log.append((pmid, f"PMC download failed, status {response.status_code}"))
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
+    }
+    try:
+        response = requests.get(pdf_url, stream=True, headers=headers, timeout=10)
+        if response.status_code == 200:
+            pdf_path = os.path.join(output_dir, f"{pmid}_PMC{pmc_id}.pdf")
+            with open(pdf_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            print(f"Downloaded PMC PDF for PMID {pmid} to {pdf_path}")
+        else:
+            failure_log.append((pmid, f"PMC PDF download failed (status {response.status_code}) - Journal: {journal}"))
+            print(f"Failed to download PMC PDF for PMID {pmid}, status code {response.status_code}")
+    except Exception as e:
+        failure_log.append((pmid, f"PMC PDF download error - {str(e)} - Journal: {journal}"))
+        print(f"Error downloading PMC PDF for PMID {pmid}: {e}")
 
 # Get Open Access PDF link via Unpaywall
 def get_unpaywall_pdf(doi):
@@ -59,20 +66,25 @@ def download_pdfs(records, output_dir):
     pdf_dir = os.path.join(output_dir, "pdfs")
     os.makedirs(pdf_dir, exist_ok=True)
 
-    for r in records:
-        pmid = r.get('PMID', '')
-        pmc_id = r.get('PMC', '').replace('PMC', '')
-        if pmc_id:
-            download_pmc_pdf(pmc_id, pdf_dir, pmid)
+for r in records:
+    pmid = r.get('PMID', '')
+    pmc_id = r.get('PMC', '').replace('PMC', '')
+    journal = r.get('JT', '')
+
+    if pmc_id:
+        download_pmc_pdf(pmc_id, pdf_dir, pmid, journal)
+    else:
+        lid_value = r.get('LID', '').strip()
+        if lid_value:
+            doi_raw = lid_value.split()[0]
+            doi = doi_raw.replace('[doi]', '').strip()
+            if doi and '/' in doi:
+                pdf_url = get_unpaywall_pdf(doi)
+                if pdf_url:
+                    download_open_pdf(pdf_url, pdf_dir, pmid)
+                else:
+                    failure_log.append((pmid, f"No OA PDF found via Unpaywall - Journal: {journal}"))
         else:
-            lid_value = r.get('LID', '').strip()
-            if lid_value:
-                doi_raw = lid_value.split()[0]
-                doi = doi_raw.replace('[doi]', '').strip()
-                if doi and '/' in doi:
-                    pdf_url = get_unpaywall_pdf(doi)
-                    if pdf_url:
-                        download_open_pdf(pdf_url, pdf_dir, pmid)
-            else:
-                failure_log.append((pmid, 'No DOI found in LID field'))
+            failure_log.append((pmid, f"No DOI found in LID field - Journal: {journal}"))
+
 

@@ -28,10 +28,10 @@ class LitDiverGUI(QWidget):
         layout = QVBoxLayout()
 
         # Email input
-        self.email_label = QLabel("Email Address:")
-        self.email_input = QLineEdit("")
-        layout.addWidget(self.email_label)
-        layout.addWidget(self.email_input)
+        #self.email_label = QLabel("Email Address:")
+        #self.email_input = QLineEdit("")
+        #layout.addWidget(self.email_label)
+        #layout.addWidget(self.email_input)
 
         # Max Results
         self.max_results_label = QLabel("Max Results (up to 10000):")
@@ -124,10 +124,10 @@ class LitDiverGUI(QWidget):
             QMessageBox.warning(self, "Missing Input", "Please select a valid keyword file.")
             return
 
-        email = self.email_input.text().strip()
-        if not email:
-            QMessageBox.warning(self, "Missing Input", "Please enter a valid email address.")
-            return
+        #email = self.email_input.text().strip()
+        #if not email:
+        #    QMessageBox.warning(self, "Missing Input", "Please enter a valid email address.")
+        #    return
 
         field_selection = self.field_dropdown.currentText()
         field = None if field_selection == "All Fields" else field_selection
@@ -138,7 +138,7 @@ class LitDiverGUI(QWidget):
             self.keywords_done = 0
 
         config = {
-            "email": email,
+            "email": "email@email.com",
             "max_results": max_results,
             "date_range": self.date_range_input.text(),
             "output_dir": self.output_dir_input.text(),

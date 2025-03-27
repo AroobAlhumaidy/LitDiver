@@ -1,4 +1,6 @@
 biopython
 pandas
 tqdm
-PySimpleGUI
+PySide6
+pyyaml
+requests

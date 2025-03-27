@@ -5,20 +5,30 @@ import yaml
 import subprocess
 from PySide6.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout,
-    QPushButton, QCheckBox, QFileDialog, QMessageBox, QHBoxLayout
+    QPushButton, QCheckBox, QFileDialog, QMessageBox, QHBoxLayout,
+    QPlainTextEdit, QComboBox
 )
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QProcess
 
 class LitDiverGUI(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("LitDiver - GUI Configuration")
-        self.setFixedWidth(400)
-        self.process = None
+        self.setFixedWidth(500)
+        self.process = QProcess(self)
+        self.process.readyReadStandardOutput.connect(self.read_stdout)
+        self.process.readyReadStandardError.connect(self.read_stderr)
+        self.process.finished.connect(self.process_finished)
         self.init_ui()
 
     def init_ui(self):
         layout = QVBoxLayout()
+
+        # Email input
+        self.email_label = QLabel("Email Address:")
+        self.email_input = QLineEdit("")
+        layout.addWidget(self.email_label)
+        layout.addWidget(self.email_input)
 
         # Max Results
         self.max_results_label = QLabel("Max Results (up to 10000):")
@@ -31,6 +41,13 @@ class LitDiverGUI(QWidget):
         self.date_range_input = QLineEdit("")
         layout.addWidget(self.date_range_label)
         layout.addWidget(self.date_range_input)
+
+        # Search Field Selector
+        self.field_label = QLabel("Search Field (optional):")
+        self.field_dropdown = QComboBox()
+        self.field_dropdown.addItems(["All Fields", "ti", "ab", "tiab", "mh", "tw"])
+        layout.addWidget(self.field_label)
+        layout.addWidget(self.field_dropdown)
 
         # Keywords File
         self.keyword_file_label = QLabel("Select Keywords File:")
@@ -57,14 +74,20 @@ class LitDiverGUI(QWidget):
 
         # Run and Stop Buttons
         button_layout = QHBoxLayout()
-        self.save_button = QPushButton("Save Config and Run")
-        self.save_button.clicked.connect(self.save_and_run)
+        self.run_button = QPushButton("Save Config and Run")
+        self.run_button.clicked.connect(self.save_and_run)
         self.stop_button = QPushButton("Stop")
         self.stop_button.clicked.connect(self.stop_process)
         self.stop_button.setEnabled(False)
-        button_layout.addWidget(self.save_button)
+        button_layout.addWidget(self.run_button)
         button_layout.addWidget(self.stop_button)
         layout.addLayout(button_layout)
+
+        # Log output area
+        self.log_output = QPlainTextEdit()
+        self.log_output.setReadOnly(True)
+        self.log_output.setPlaceholderText("Logs will appear here...")
+        layout.addWidget(self.log_output)
 
         self.setLayout(layout)
 
@@ -92,36 +115,55 @@ class LitDiverGUI(QWidget):
             QMessageBox.warning(self, "Missing Input", "Please select a valid keyword file.")
             return
 
+        email = self.email_input.text().strip()
+        if not email:
+            QMessageBox.warning(self, "Missing Input", "Please enter a valid email address.")
+            return
+
+        field_selection = self.field_dropdown.currentText()
+        field = None if field_selection == "All Fields" else field_selection
+
         config = {
-            "email": "your-email@example.com",
+            "email": email,
             "max_results": max_results,
             "date_range": self.date_range_input.text(),
             "output_dir": self.output_dir_input.text(),
             "download_pdfs": self.pdf_checkbox.isChecked(),
+            "field": field_selection if field else "all"
         }
-        with open("config.yaml", "w") as f:
+        with open("config.yml", "w") as f:
             yaml.dump(config, f)
 
-        try:
-            self.process = subprocess.Popen(["python3", "main.py", "--keywords", keyword_file])
-            self.stop_button.setEnabled(True)
-            QTimer.singleShot(2000, lambda: self.check_process(config["output_dir"]))
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to run main.py: {e}")
+        self.log_output.clear()
+        self.stop_button.setEnabled(True)
+        self.run_button.setEnabled(False)
 
-    def check_process(self, output_dir):
-        if self.process and self.process.poll() is None:
-            QTimer.singleShot(1000, lambda: self.check_process(output_dir))
-        else:
-            self.stop_button.setEnabled(False)
-            QMessageBox.information(self, "Success", "LitDiver has finished running.")
-            self.open_output_dir(output_dir)
+        cmd = ["main.py", "--keywords", keyword_file]
+        if field:
+            cmd.extend(["--field", field])
+
+        self.process.start("python3", cmd)
+
+    def read_stdout(self):
+        output = self.process.readAllStandardOutput().data().decode()
+        self.log_output.appendPlainText(output)
+
+    def read_stderr(self):
+        output = self.process.readAllStandardError().data().decode()
+        self.log_output.appendPlainText(output)
+
+    def process_finished(self):
+        self.stop_button.setEnabled(False)
+        self.run_button.setEnabled(True)
+        self.log_output.appendPlainText("✅ LitDiver has finished.")
+        self.open_output_dir(self.output_dir_input.text())
 
     def stop_process(self):
-        if self.process and self.process.poll() is None:
+        if self.process and self.process.state() == QProcess.Running:
             self.process.terminate()
+            self.log_output.appendPlainText("❌ LitDiver was stopped by the user.")
             self.stop_button.setEnabled(False)
-            QMessageBox.information(self, "Stopped", "LitDiver was stopped by the user.")
+            self.run_button.setEnabled(True)
 
     def open_output_dir(self, path):
         if platform.system() == "Windows":

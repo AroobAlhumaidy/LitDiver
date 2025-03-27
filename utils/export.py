@@ -156,5 +156,7 @@ def save_combined_xml(all_records, output_dir):
 
     # Copy stylesheet to output folder
     shutil.copy("pubmed_style.xsl", output_dir)
-
+    xml_dir = os.path.join(output_dir, "xml")
+    os.makedirs(xml_dir, exist_ok=True)
+    xml_path = os.path.join(xml_dir, "results_combined_deduplicated.xml")
     print(f"Combined deduplicated XML saved to {xml_path}")

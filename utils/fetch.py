@@ -55,4 +55,8 @@ def save_as_xml(keyword, id_list, output_dir):
     # Copy the stylesheet into output dir
     shutil.copy("pubmed_style.xsl", output_dir)
 
+    xml_dir = os.path.join(output_dir, "xml")
+    os.makedirs(xml_dir, exist_ok=True)
+    filename = os.path.join(xml_dir, f"results_{keyword.replace(' ', '_')}.xml")
+
     print(f"XML results saved to {filename}")

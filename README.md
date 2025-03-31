@@ -87,7 +87,7 @@ git clone https://github.com/AroobAlhumaidy/LitDiver
 ### 🚀 How It Works 
 #### 1. Open LitDiver from the Terminal
 ##### • Linux (Ubuntu/Debian)
-   1. Open your **Terminal** (press `Ctrl + Alt + T`)
+   1. Open the Terminal app
    2. Navigate to the folder where you downloaded LitDiver:
    ```bash
    cd /path/to/LitDiver

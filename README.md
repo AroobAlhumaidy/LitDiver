@@ -136,7 +136,6 @@ When the search is complete, LitDiver will:
 
 | Keyword | PMID | Title | Journal Title | Publication Date | Abstract | Authors | Author Address | Publication Types | MeSH Terms | Country of Publication | Volume | Issue | Page Numbers | Language | PubMed Central ID | Grant Info | CAS Registry Numbers | Comments/Corrections | DOI | Source | Entry Date | Last Revision Date |
 |---------|------|-------|----------------|------------------|----------|---------|----------------|--------------------|-------------|-------------------------|--------|--------|----------------|----------|--------------------|------------|------------------------|------------------------|------|--------|-------------|----------------------|
-| cancer | 12345 | Example Title | Journal of Example | 2024-01-01 | Example abstract text. | Smith J, Doe A | Univ XYZ | Journal Article | Neoplasms; Oncology | USA | 23 | 4 | 100–105 | English | PMC123456 | NIH Grant #123 | 50-00-0 | Erratum in... | 10.1000/j.jmb.2024.01.001 | PubMed | 2024-01-02 | 2024-01-15 |
 
 
 ---

@@ -137,8 +137,7 @@ When the search is complete, LitDiver will:
 
 - Export **citation files** in `.ris` format  
 - Generate a **summary report** in `summary_report.md`  
-- PDF that was unable to download are registed in `download_failures.log`
-
+- PDFs that could not be downloaded are logged with reasons in `download_failures.log`
 
 ---
 ### 📝 Notes

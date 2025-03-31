@@ -130,12 +130,12 @@ When the search is complete, LitDiver will:
 
 - ✅ Open your **output folder** automatically  
 - 📄 Save all available **PDFs**  
-- 📑 Export **citation files** in `.ris` format  
-- 📊 Generate a **summary report** in `summary_report.md`  
 - 📋 Export a **metadata spreadsheet** (`.csv`) with the following fields:
-
 | Keyword | PMID | Title | Journal Title | Publication Date | Abstract | Authors | Author Address | Publication Types | MeSH Terms | Country of Publication | Volume | Issue | Page Numbers | Language | PubMed Central ID | Grant Info | CAS Registry Numbers | Comments/Corrections | DOI | Source | Entry Date | Last Revision Date |
 |---------|------|-------|----------------|------------------|----------|---------|----------------|--------------------|-------------|-------------------------|--------|--------|----------------|----------|--------------------|------------|------------------------|------------------------|------|--------|-------------|----------------------|
+- 📑 Export **citation files** in `.ris` format  
+- 📊 Generate a **summary report** in `summary_report.md`  
+
 
 
 ---

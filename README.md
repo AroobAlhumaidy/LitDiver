@@ -87,45 +87,39 @@ git clone https://github.com/AroobAlhumaidy/LitDiver
 ### 🚀 How It Works 
 #### 1. Open LitDiver from the Terminal
 ##### • Linux (Ubuntu/Debian)
-1. Open your **Terminal** (press `Ctrl + Alt + T`)
-2. Navigate to the folder where you downloaded LitDiver:
-```bash
-cd /path/to/LitDiver
-```
-3. Start the app:
-```bash
-python3 gui.py
-```
+   1. Open your **Terminal** (press `Ctrl + Alt + T`)
+   2. Navigate to the folder where you downloaded LitDiver:
+   ```bash
+   cd /path/to/LitDiver
+   ```
+   3. Start the app:
+   ```bash
+   python3 gui.py
+   ```
 ##### • macOS
-1. Open the Terminal app
-2. Navigate to the LitDiver folder
-```sh
-cd /path/to/LitDiver
-```
-3. Start the app:
-```sh
-python3 gui_MacOS.py
-```
-2. Fill in Your Search Settings
+   1. Open the Terminal app
+   2. Navigate to the LitDiver folder
+   ```sh
+   cd /path/to/LitDiver
+   ```
+   3. Start the app:
+   ```sh
+   python3 gui_MacOS.py
+   ```
+#### 2. Fill in Your Search Settings
    - Select your keywords file (.txt, one keyword or phrase per line)
    - Choose an output folder where results will be saved
-   - Set how many articles you want (e.g., 100)
-   - (Optional) Add a date range (e.g., 2020:2024)
-   - (Optional) Choose a field to search in (e.g., title, abstract, MeSH)
-   - Keep Download PDFs checked to fetch open-access full-texts
+   - Set how many articles you want (example: 100, maximum is 10,000 )
+   - (Optional) Add a date range (example: 2020:2024)
+   - *(Optional)* Choose a **field to search in** (example: title, abstract, MeSH)  
+     - **Default:** All fields LitDiver will search across the full PubMed record, including title, abstract, MeSH terms, and more
+   - Keep "Download PDFs" checked to fetch open-access full-texts
 
-3. Click ‘Save Config and Run’
+#### 3. Click ‘Save Config and Run’
    - A live progress bar and log window will keep you updated
    - You can safely stop the run at any time
 
-4. Get Your Results
-When the search is complete, LitDiver will:
-   - Check your output folder automatically
-   - Save all available PDFs in pdf folder 
-   - Export citation files in .ris format
-   - Generate a summary report of your search
-
-4. Get Your Results
+#### 4. Get Your Results
 When the search is complete, LitDiver will:
 
 - Open your **output folder** automatically  

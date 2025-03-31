@@ -84,9 +84,9 @@ pip install -r requirements.txt
 git clone https://github.com/AroobAlhumaidy/LitDiver
 ```
 ---
-## 🚀 How It Works 
-### 1. Open LitDiver from the Terminal
-#### • Linux (Ubuntu/Debian)
+### 🚀 How It Works 
+#### 1. Open LitDiver from the Terminal
+##### • Linux (Ubuntu/Debian)
 1. Open your **Terminal** (press `Ctrl + Alt + T`)
 2. Navigate to the folder where you downloaded LitDiver:
 ```bash
@@ -96,7 +96,7 @@ cd /path/to/LitDiver
 ```bash
 python3 gui.py
 ```
-#### • macOS
+##### • macOS
 1. Open the Terminal app
 2. Navigate to the LitDiver folder
 ```sh
@@ -125,7 +125,7 @@ When the search is complete, LitDiver will:
    - Export citation files in .ris format
    - Generate a summary report of your search
 
-### 4. Get Your Results
+4. Get Your Results
 When the search is complete, LitDiver will:
 
 - Open your **output folder** automatically  

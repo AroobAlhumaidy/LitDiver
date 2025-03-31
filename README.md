@@ -128,26 +128,17 @@ When the search is complete, LitDiver will:
 ### 4. Get Your Results
 When the search is complete, LitDiver will:
 
-- ✅ Open your **output folder** automatically  
-- 📄 Save all available **PDFs**  
-- 📋 Export a **metadata spreadsheet** (`.csv`) with the following fields:
+- Open your **output folder** automatically  
+- Save all available **PDFs**  
+- Export a **metadata spreadsheet** (`.csv`) with the following fields:
 
 | Keyword | PMID | Title | Journal Title | Publication Date | Abstract | Authors | Author Address | Publication Types | MeSH Terms | Country of Publication | Volume | Issue | Page Numbers | Language | PubMed Central ID | Grant Info | CAS Registry Numbers | Comments/Corrections | DOI | Source | Entry Date | Last Revision Date |
 |---------|------|-------|----------------|------------------|----------|---------|----------------|--------------------|-------------|-------------------------|--------|--------|----------------|----------|--------------------|------------|------------------------|------------------------|------|--------|-------------|----------------------|
 
-- 📑 Export **citation files** in `.ris` format  
-- 📊 Generate a **summary report** in `summary_report.md`  
+- Export **citation files** in `.ris` format  
+- Generate a **summary report** in `summary_report.md`  
+- PDF that was unable to download are registed in `download_failures.log`
 
-
-
----
-
-### 📊 Example Output:
-- `results_<keyword>.csv` / `.xml` 
-- Combined deduplicated XML
-- `summary_report.md`
-- `pdfs/` folder with downloaded PDFs
-- `download_failures.log`
 
 ---
 ### 📝 Notes

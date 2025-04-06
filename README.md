@@ -20,7 +20,7 @@ LitDiver automates the process of retrieving literature from PubMed based on cus
    - PDFs saved in an organized folder per run.
 
 3. **📑 Reference File Export (RIS Format)**  
-   - Automatically creates .RIS files** for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
+   - Automatically creates .RIS files for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
 
 4. **⚙️ Customizable Config File (YAML)**  
    - Set:

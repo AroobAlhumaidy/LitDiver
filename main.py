@@ -6,6 +6,9 @@ from utils.pdf_downloader import download_pdfs
 from utils.pdf_downloader import failure_log
 from utils.log import log_failures
 from utils.config_loader import load_config
+from utils.export import save_combined_ris
+from utils.export import save_as_ris
+
 
 from Bio import Entrez
 
@@ -71,6 +74,10 @@ def main():
     if all_records:
         save_combined_xml(all_records, output_dir)
         save_combined_csv(all_records, output_dir)
+        save_combined_ris(all_records, output_dir)
+        save_as_csv(keyword, records, output_dir)
+        save_as_ris(keyword, records, output_dir)
+
     generate_summary_report(all_records, output_dir)
     log_failures(output_dir, failure_log)
 if __name__ == "__main__":

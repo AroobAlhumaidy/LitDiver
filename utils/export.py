@@ -166,3 +166,65 @@ def save_combined_xml(all_records, output_dir):
     # Copy XSL stylesheet to xml/ folder
     shutil.copy("pubmed_style.xsl", xml_dir)
     print(f"Combined deduplicated XML saved to {xml_path}")
+
+# Export combined deduplicated RIS
+def save_combined_ris(all_records, output_dir):
+    unique_map = {}
+    for r in all_records:
+        pmid = r.get('PMID', '')
+        if pmid:
+            if pmid in unique_map:
+                unique_map[pmid]['__keywords'].add(r.get('__keyword', ''))
+            else:
+                r['__keywords'] = set([r.get('__keyword', '')])
+                unique_map[pmid] = r
+
+    ris_lines = []
+    for r in unique_map.values():
+        ris_lines.append("TY  - JOUR")
+        ris_lines.append(f"TI  - {r.get('TI', '')}")
+        ris_lines.append(f"AU  - {'\nAU  - '.join(r.get('AU', []))}")
+        ris_lines.append(f"AB  - {r.get('AB', '')}")
+        ris_lines.append(f"JO  - {r.get('JT', '')}")
+        ris_lines.append(f"VL  - {r.get('VI', '')}")
+        ris_lines.append(f"IS  - {r.get('IP', '')}")
+        ris_lines.append(f"SP  - {r.get('PG', '')}")
+        ris_lines.append(f"PY  - {r.get('DP', '')}")
+        ris_lines.append(f"PB  - {r.get('PL', '')}")
+        ris_lines.append(f"LA  - {r.get('LA', '')}")
+        ris_lines.append(f"ID  - {r.get('PMID', '')}")
+        ris_lines.append(f"DO  - {r.get('LID', '').replace('[doi]', '').strip()}")
+        ris_lines.append("ER  - \n")
+
+    ris_path = os.path.join(output_dir, "results_combined_deduplicated.ris")
+    with open(ris_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(ris_lines))
+
+    print(f"Combined deduplicated RIS saved to {ris_path}")
+
+# Save RIS file for a single keyword
+def save_as_ris(keyword, records, output_dir):
+    ris_lines = []
+    for r in records:
+        ris_lines.append("TY  - JOUR")
+        ris_lines.append(f"TI  - {r.get('TI', '')}")
+        ris_lines.append(f"AU  - {'\nAU  - '.join(r.get('AU', []))}")
+        ris_lines.append(f"AB  - {r.get('AB', '')}")
+        ris_lines.append(f"JO  - {r.get('JT', '')}")
+        ris_lines.append(f"VL  - {r.get('VI', '')}")
+        ris_lines.append(f"IS  - {r.get('IP', '')}")
+        ris_lines.append(f"SP  - {r.get('PG', '')}")
+        ris_lines.append(f"PY  - {r.get('DP', '')}")
+        ris_lines.append(f"PB  - {r.get('PL', '')}")
+        ris_lines.append(f"LA  - {r.get('LA', '')}")
+        ris_lines.append(f"ID  - {r.get('PMID', '')}")
+        ris_lines.append(f"DO  - {r.get('LID', '').replace('[doi]', '').strip()}")
+        ris_lines.append("ER  - \n")
+
+    ris_dir = os.path.join(output_dir, "ris")
+    os.makedirs(ris_dir, exist_ok=True)
+    ris_path = os.path.join(ris_dir, f"results_{keyword.replace(' ', '_')}.ris")
+    with open(ris_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(ris_lines))
+
+    print(f"RIS file saved to {ris_path}")

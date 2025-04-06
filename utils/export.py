@@ -183,7 +183,9 @@ def save_combined_ris(all_records, output_dir):
     for r in unique_map.values():
         ris_lines.append("TY  - JOUR")
         ris_lines.append(f"TI  - {r.get('TI', '')}")
-        ris_lines.append(f"AU  - {'\nAU  - '.join(r.get('AU', []))}")
+        authors = r.get('AU', [])
+        if authors:
+            ris_lines.extend([f"AU  - {author}" for author in authors])
         ris_lines.append(f"AB  - {r.get('AB', '')}")
         ris_lines.append(f"JO  - {r.get('JT', '')}")
         ris_lines.append(f"VL  - {r.get('VI', '')}")

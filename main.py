@@ -75,6 +75,8 @@ def main():
         save_combined_xml(all_records, output_dir)
         save_combined_csv(all_records, output_dir)
         save_combined_ris(all_records, output_dir)
+        save_as_csv(keyword, records, output_dir)
+        save_as_ris(keyword, records, output_dir)
 
     generate_summary_report(all_records, output_dir)
     log_failures(output_dir, failure_log)

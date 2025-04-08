@@ -35,7 +35,7 @@ All results are saved in structured .csv formats, ready for analysis and filteri
    - Set:
      - Max results: per keyword (up to 10,000)
      - Date range filter: (e.g., `2018:2024`)
-     - Output directoryy
+     - Output directory
      - Enable/disable PDF download
 
 6. **🔍 Flexible Search Scope Control (for command-line version)**  
@@ -69,13 +69,14 @@ All results are saved in structured .csv formats, ready for analysis and filteri
 
 
 ### 📂 File structure:
+
 | File/Folder         | Description                                |
 |---------------------|--------------------------------------------|
-| `gui.py`            | # GUI for Linux                |
-| `gui_MacOS.py`            | # GUI for macOS                |
+| `gui.py`            | GUI version for Linux (PySide6-based)               |
+| `gui_MacOS.py`            | GUI version for macOS (same features)             |
 | `keywords.txt`      | List of search keywords (one per line)     |
-| `config.yml`        | Config file (date range, results limit, etc.)   |
-| `utils/`            | Contains modular scripts (fetch, export, pdfs, log, etc.) |
+| `config.yml`        | Search settings file (field, date range, etc.)   |
+| `utils/`            | Contains modular scripts: fetch.py, export.py, pdf_downloader.py, etc. |
 | `requirements.txt`  | Required Python packages                   |
 
 ---
@@ -142,7 +143,6 @@ When the search is complete, LitDiver will:
 ### 📝 Notes
 - Ensure your keywords.txt file is formatted with one keyword/search phrase per line.
 - An internet connection is required for downloading articles and PDFs.
-- No NCBI API key is required, but rate limits apply.
 
 ---
 ### 🧑‍💻 Contributing

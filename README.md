@@ -71,17 +71,16 @@ LitDiver automates the process of retrieving literature from PubMed based on cus
 
 ---
 
+### 💻 Installation 
+```
+git clone https://github.com/AroobAlhumaidy/LitDiver
+```
+---
 ### 🛠️ Requirements:
 - Python 3.7+
 - Install dependencies:
 ```bash
 pip install -r requirements.txt
-```
-
----
-### 💻 Installation 
-```
-git clone https://github.com/AroobAlhumaidy/LitDiver
 ```
 ---
 ### 🚀 How It Works 

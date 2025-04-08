@@ -4,7 +4,7 @@
 ---
 
 ### 📖 Overview:
-LitDiver automates the process of retrieving literature from PubMed based on custom keywords, downloading available PDFs (PMC + Open Access), ris file for referincing tools, and generating a detailed summary report. Designed to streamlining papers search for small or large volume of scientific articles.
+LitDiver automates the process of retrieving scientific literature from PubMed using custom keywords (search queries), downloading available PDFs (from PMC and open-access sources), exporting citation data as a RIS file for reference managers, and generating a detailed summary report. It is designed to streamline literature searches for both small- and large-scale research projects
 
 💻 LitDiver began with PubMed, In the future, support for additional databases will be added.
 

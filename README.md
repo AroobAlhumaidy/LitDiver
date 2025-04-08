@@ -38,7 +38,7 @@ All results are saved in structured .csv formats, ready for analysis and filteri
      - Output directoryy
      - Enable/disable PDF download
 
-6. **🔍 Flexible Search Scope Control**  
+6. **🔍 Flexible Search Scope Control (for command-line version)**  
    - Customize where PubMed searches: Title, Abstract, MeSH terms, etc.
    - Check out options with `--help`
      Example:
@@ -147,4 +147,3 @@ When the search is complete, LitDiver will:
 ---
 ### 🧑‍💻 Contributing
 Pull requests are welcome, Please open an issue first to discuss what you’d like to change.
-

@@ -80,6 +80,7 @@ git clone https://github.com/AroobAlhumaidy/LitDiver
 - Python 3.7+
 - Install dependencies:
 ```bash
+cd LitDiver
 pip install -r requirements.txt
 ```
 ---

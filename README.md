@@ -15,21 +15,30 @@ LitDiver automates the process of retrieving scientific literature from PubMed u
    - Real-time progress tracking and log updates  
    - Output folder opens automatically at the end
 
-2. **📥 Download PDFs Automatically**  
+2. **🧠 Rich Metadata Retrieval**. 
+
+Fetches detailed article metadata including:  
+
+| Keyword | PMID | Title | Journal Title | Publication Date | Abstract | Authors | Author Address | Publication Types | MeSH Terms | Country of Publication | Volume | Issue | Page Numbers | Language | PubMed Central ID | Grant Info | CAS Registry Numbers | Comments/Corrections | DOI | Source | Entry Date | Last Revision Date |
+|---------|------|-------|----------------|------------------|----------|---------|----------------|--------------------|-------------|-------------------------|--------|--------|----------------|----------|--------------------|------------|------------------------|------------------------|------|--------|-------------|----------------------|
+
+All results are saved in structured .csv formats, ready for analysis and filtering.
+
+3. **📥 Download PDFs Automatically**  
    - Retrieves available PDFs via PubMed Central (PMC) or Open Access (Unpaywall).
    - PDFs saved in an organized folder per run.
 
-3. **📑 Reference File Export (RIS Format)**  
+4. **📑 Reference File Export (RIS Format)**  
    - Automatically creates .RIS files for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
 
-4. **⚙️ Customizable Config File (YAML)**  
+5. **⚙️ Customizable Config File (YAML)**  
    - Set:
      - Max results: per keyword (up to 10,000)
      - Date range filter: (e.g., `2018:2024`)
      - Output directoryy
      - Enable/disable PDF download
 
-5. **🔍 Flexible Search Scope Control**  
+6. **🔍 Flexible Search Scope Control**  
    - Customize where PubMed searches: Title, Abstract, MeSH terms, etc.
    - Check out options with `--help`
      Example:
@@ -38,14 +47,14 @@ LitDiver automates the process of retrieving scientific literature from PubMed u
      ```
    - Default: Broad search across all fields.
 
-6. **📊 Summary Report Generation**  
+7. **📊 Summary Report Generation**  
    - Generates a Markdown report with:
      - Total articles fetched
      - PDF download attempts
      - Top journals
    - File: `summary_report.md` in the output folder.
 
-7. **🪵 Download Failure Logging**  
+8. **🪵 Download Failure Logging**  
    - Failed PDF downloads logged with reasons for easy troubleshooting.  
    - File: `download_failures.log`
 
@@ -124,11 +133,7 @@ When the search is complete, LitDiver will:
 
 - Open your **output folder** automatically  
 - Save all available **PDFs**  
-- Export a **metadata spreadsheet** (`.csv`) with the following fields:
-
-| Keyword | PMID | Title | Journal Title | Publication Date | Abstract | Authors | Author Address | Publication Types | MeSH Terms | Country of Publication | Volume | Issue | Page Numbers | Language | PubMed Central ID | Grant Info | CAS Registry Numbers | Comments/Corrections | DOI | Source | Entry Date | Last Revision Date |
-|---------|------|-------|----------------|------------------|----------|---------|----------------|--------------------|-------------|-------------------------|--------|--------|----------------|----------|--------------------|------------|------------------------|------------------------|------|--------|-------------|----------------------|
-
+- Export a **metadata spreadsheet** (`.csv`)
 - Export **citation files** in `.ris` format  
 - Generate a **summary report** in `summary_report.md`  
 - PDFs that could not be downloaded are logged with reasons in `download_failures.log`

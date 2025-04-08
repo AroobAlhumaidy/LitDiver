@@ -15,7 +15,14 @@ LitDiver automates the process of retrieving scientific literature from PubMed u
    - Real-time progress tracking and log updates  
    - Output folder opens automatically at the end
 
-2. **🧠 Rich Metadata Retrieval**. 
+2. **📥 Download PDFs Automatically**  
+   - Retrieves available PDFs via PubMed Central (PMC) or Open Access (Unpaywall).
+   - PDFs saved in an organized folder per run.
+
+3. **📑 Reference File Export (RIS Format)**  
+   - Automatically creates .RIS files for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
+
+4. **🧠 Rich Metadata Retrieval**. 
 
 Fetches detailed article metadata including:  
 
@@ -24,14 +31,7 @@ Fetches detailed article metadata including:
 
 All results are saved in structured .csv formats, ready for analysis and filtering.
 
-3. **📥 Download PDFs Automatically**  
-   - Retrieves available PDFs via PubMed Central (PMC) or Open Access (Unpaywall).
-   - PDFs saved in an organized folder per run.
-
-4. **📑 Reference File Export (RIS Format)**  
-   - Automatically creates .RIS files for each keyword and a combined deduplicated RIS, compatible with EndNote, Mendeley, and other referencing tools.
-
-5. **⚙️ Customizable Config File (YAML)**  
+5. **⚙️ Customizable Config File**  
    - Set:
      - Max results: per keyword (up to 10,000)
      - Date range filter: (e.g., `2018:2024`)
